@@ -14,6 +14,7 @@ const AnimatedNumber = ({
   transitions,
   includeComma,
   locale,
+  skipInitial
 }) => {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -39,11 +40,15 @@ const AnimatedNumber = ({
   }, [animateToNumber, fontStyle]);
 
   React.useEffect(() => {
-    if (isInView) {
+    controls.start("visible");
+  }, [animateToNumber]);
+
+  React.useEffect(() => {
+    if (isInView && !skipInitial) {
       controls.start("visible");
     }
-  }, [isInView, animateToNumber]);
-
+  }, [isInView, skipInitial]);
+  
   return (
     <span ref={ref}>
       {numberHeight !== 0 && (
